@@ -2219,13 +2219,11 @@ body.homepage .intro-subtitle {
 @keyframes lemonCardEntrance {
   0% {
     opacity: 0;
-    transform: translateY(36px) scale(0.978);
-    filter: blur(7px);
+    transform: translateY(16px);
   }
   100% {
     opacity: 1;
-    transform: translateY(0) scale(1);
-    filter: blur(0);
+    transform: translateY(0);
   }
 }
 
@@ -2249,16 +2247,16 @@ body.homepage .intro-subtitle {
 
 /* ---------------------------------------------------------
    2. Staggered Homepage Entrance Timeline
-   Delay cadence: ~100-120ms between visual layers
+   Snappy luxury cadence: fast, crisp, zero scroll interference
    --------------------------------------------------------- */
 .homepage .site-header {
-  animation: lemonNavEntrance 0.75s var(--ease-luxury) 0.05s both;
+  animation: lemonNavEntrance 0.5s var(--ease-luxury) 0.02s both;
   will-change: transform, opacity;
 }
 
 .homepage .intro-badge {
-  animation: lemonBadgeEntrance 0.75s var(--ease-luxury) 0.18s both;
-  will-change: transform, opacity, filter;
+  animation: lemonBadgeEntrance 0.5s var(--ease-luxury) 0.08s both;
+  will-change: transform, opacity;
 }
 
 .homepage .intro-badge-dot {
@@ -2266,34 +2264,34 @@ body.homepage .intro-subtitle {
 }
 
 .homepage .intro-heading {
-  animation: lemonHeadlineEntrance 0.85s var(--ease-luxury) 0.30s both;
-  will-change: transform, opacity, filter;
+  animation: lemonHeadlineEntrance 0.55s var(--ease-luxury) 0.14s both;
+  will-change: transform, opacity;
 }
 
 .homepage .intro-subtitle {
-  animation: lemonSubtitleEntrance 0.75s var(--ease-luxury) 0.42s both;
-  will-change: transform, opacity, filter;
+  animation: lemonSubtitleEntrance 0.5s var(--ease-luxury) 0.20s both;
+  will-change: transform, opacity;
 }
 
 /* Top Row Featured Gold Cards (Hero Visuals) */
 .homepage .featured-cards-grid .featured-card-wrapper {
-  will-change: transform, opacity, filter;
+  will-change: opacity, transform;
 }
 
 .homepage .featured-cards-grid .featured-card-wrapper:nth-child(1) {
-  animation: lemonCardEntrance 0.85s var(--ease-luxury) 0.54s both;
+  animation: lemonCardEntrance 0.45s var(--ease-luxury) 0.08s both;
 }
 
 .homepage .featured-cards-grid .featured-card-wrapper:nth-child(2) {
-  animation: lemonCardEntrance 0.85s var(--ease-luxury) 0.66s both;
+  animation: lemonCardEntrance 0.45s var(--ease-luxury) 0.14s both;
 }
 
 .homepage .featured-cards-grid .featured-card-wrapper:nth-child(3) {
-  animation: lemonCardEntrance 0.85s var(--ease-luxury) 0.78s both;
+  animation: lemonCardEntrance 0.45s var(--ease-luxury) 0.20s both;
 }
 
 .homepage .featured-cards-grid .featured-card-wrapper:nth-child(4) {
-  animation: lemonCardEntrance 0.85s var(--ease-luxury) 0.90s both;
+  animation: lemonCardEntrance 0.45s var(--ease-luxury) 0.26s both;
 }
 
 /* ---------------------------------------------------------
@@ -2361,15 +2359,32 @@ body.homepage .intro-subtitle {
 /* If JavaScript is active and observer attaches, start slightly offset and transition smoothly */
 html.js-ready .reveal-on-scroll {
   opacity: 0;
-  transform: translateY(18px);
+  transform: translateY(14px);
   transition:
-    opacity 0.4s var(--ease-luxury),
-    transform 0.4s var(--ease-luxury);
+    opacity 0.32s var(--ease-luxury),
+    transform 0.32s var(--ease-luxury);
 }
 
 html.js-ready .reveal-on-scroll.is-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Once fully revealed, anchor element permanently to eliminate any scroll/resizing recalculations */
+html.js-ready .reveal-on-scroll.is-revealed {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+  will-change: auto !important;
+}
+
+/* Prevent pointer thrashing & accidental hover tilt during high-speed scrolling */
+body.is-scrolling .amal-gold-card,
+body.is-scrolling .team-card,
+body.is-scrolling .gold-surface,
+body.is-scrolling .gold-cta-button,
+body.is-scrolling .team-card-arrow-circle {
+  pointer-events: none !important;
 }
 
 /* ---------------------------------------------------------

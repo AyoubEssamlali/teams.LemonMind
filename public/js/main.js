@@ -13,25 +13,58 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 1. Instant & Smooth Scroll Reveal for Team Cards (Optimized for Fast Scrolling)
   const revealElements = document.querySelectorAll('.reveal-on-scroll');
+  const allCards = document.querySelectorAll('.amal-gold-card, .team-card');
+
+  const resetAllCardsTransform = () => {
+    allCards.forEach((card) => {
+      if (card.style.transform) {
+        card.style.transform = '';
+      }
+    });
+  };
+
+  // High-Performance Scroll Guard: Prevents hover/tilt glitches during fast scrolling
+  let scrollEndTimer = null;
+  window.addEventListener('scroll', () => {
+    if (!document.body.classList.contains('is-scrolling')) {
+      document.body.classList.add('is-scrolling');
+    }
+    resetAllCardsTransform();
+
+    clearTimeout(scrollEndTimer);
+    scrollEndTimer = setTimeout(() => {
+      document.body.classList.remove('is-scrolling');
+    }, 100);
+  }, { passive: true });
+
+  window.addEventListener('blur', resetAllCardsTransform);
+  document.addEventListener('mouseleave', resetAllCardsTransform);
+
   if (revealElements.length > 0) {
     const isMobile = window.innerWidth <= 768 || window.matchMedia('(pointer: coarse)').matches;
     
+    const markVisible = (el) => {
+      if (el.classList.contains('is-revealed')) return;
+      el.classList.add('is-visible');
+      setTimeout(() => {
+        el.classList.add('is-revealed');
+      }, 320);
+    };
+
     if (isMobile || prefersReduced) {
-      // On mobile or reduced motion: make cards instantly visible with zero lag or glitch
-      revealElements.forEach((el) => el.classList.add('is-visible'));
+      revealElements.forEach(markVisible);
     } else if ('IntersectionObserver' in window) {
-      // On desktop: generous anticipation margin (250px) so cards are ready before visible
       const revealObserver = new IntersectionObserver(
         (entries, observer) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
-              entry.target.classList.add('is-visible');
+              markVisible(entry.target);
               observer.unobserve(entry.target);
             }
           });
         },
         {
-          rootMargin: '250px 0px 250px 0px',
+          rootMargin: '300px 0px 300px 0px',
           threshold: 0.01
         }
       );
@@ -40,12 +73,19 @@ document.addEventListener('DOMContentLoaded', () => {
         revealObserver.observe(el);
       });
     } else {
-      revealElements.forEach((el) => el.classList.add('is-visible'));
+      revealElements.forEach(markVisible);
     }
 
-    // High-speed resilience fallback
+    // High-speed resilience fallback on first scroll
+    const handleInitialScroll = () => {
+      revealElements.forEach(markVisible);
+      window.removeEventListener('scroll', handleInitialScroll);
+    };
+    window.addEventListener('scroll', handleInitialScroll, { passive: true, once: true });
+
+    // High-speed resilience fallback timer
     setTimeout(() => {
-      revealElements.forEach((el) => el.classList.add('is-visible'));
+      revealElements.forEach(markVisible);
     }, 350);
   }
 
@@ -55,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const surfaces = document.querySelectorAll('.gold-surface, .identity-panel.gold');
     surfaces.forEach((surface) => {
       surface.addEventListener('pointermove', (e) => {
-        if (e.pointerType === 'touch') return;
+        if (e.pointerType === 'touch' || document.body.classList.contains('is-scrolling')) return;
         const rect = surface.getBoundingClientRect();
         const x = ((e.clientX - rect.left) / rect.width) * 100;
         const y = ((e.clientY - rect.top) / rect.height) * 100;
@@ -70,17 +110,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Subtle 3D perspective tilt on interactive cards (controlled, max 2.5 degrees)
-    const cards = document.querySelectorAll('.amal-gold-card, .team-card');
-    cards.forEach((card) => {
+    allCards.forEach((card) => {
       let isHovered = false;
 
       card.addEventListener('pointerenter', (e) => {
-        if (e.pointerType === 'touch') return;
+        if (e.pointerType === 'touch' || document.body.classList.contains('is-scrolling')) return;
         isHovered = true;
       });
 
       card.addEventListener('pointermove', (e) => {
-        if (!isHovered || e.pointerType === 'touch') return;
+        if (!isHovered || e.pointerType === 'touch' || document.body.classList.contains('is-scrolling')) {
+          if (card.style.transform) card.style.transform = '';
+          return;
+        }
         const rect = card.getBoundingClientRect();
         const normX = (e.clientX - rect.left) / rect.width - 0.5;
         const normY = (e.clientY - rect.top) / rect.height - 0.5;
@@ -91,10 +133,13 @@ document.addEventListener('DOMContentLoaded', () => {
         card.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-4px) scale3d(1.008, 1.008, 1.008)`;
       });
 
-      card.addEventListener('pointerleave', () => {
+      const handleCardLeave = () => {
         isHovered = false;
         card.style.transform = '';
-      });
+      };
+
+      card.addEventListener('pointerleave', handleCardLeave);
+      card.addEventListener('pointercancel', handleCardLeave);
     });
 
     // 3. Subtle Magnetic Micro-Movement on Buttons & Action Elements
