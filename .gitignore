@@ -1,0 +1,7 @@
+node_modules
+.gemini
+backup_before_enhancements
+.DS_Store
+
+*.zip
+

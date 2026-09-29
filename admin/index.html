@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LemonMind — Administration</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+  <style>
+    [hidden],
+    #dashboard[hidden],
+    #login-screen[hidden],
+    .dashboard[hidden],
+    .login-screen[hidden] {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== LOGIN SCREEN ========== -->
+  <div id="login-screen" class="login-screen">
+    <div class="login-card">
+      <div class="login-logo">
+        <img src="../assets/logo-header.png" alt="LemonMind" width="135">
+      </div>
+      <h1 class="login-title">Administration</h1>
+      <p class="login-subtitle">Connectez-vous pour gérer les cartes digitales</p>
+      <form id="login-form" class="login-form" autocomplete="off">
+        <div class="form-field">
+          <label for="login-username">Identifiant</label>
+          <input type="text" id="login-username" name="username" required autocomplete="username" placeholder="admin">
+        </div>
+        <div class="form-field">
+          <label for="login-password">Mot de passe</label>
+          <div class="password-wrapper">
+            <input type="password" id="login-password" name="password" required autocomplete="current-password" placeholder="••••••••">
+            <button type="button" class="toggle-pwd" onclick="togglePasswordVisibility('login-password', this)" aria-label="Afficher le mot de passe">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div id="login-error" class="form-error" hidden></div>
+        <button type="submit" class="btn btn-primary btn-full" id="login-btn">
+          <span>Se connecter</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </button>
+      </form>
+    </div>
+    <div class="login-footer">
+      <p>© 2026 LemonMind Agency — Accès réservé</p>
+    </div>
+  </div>
+
+  <!-- ========== DASHBOARD ========== -->
+  <div id="dashboard" class="dashboard" hidden style="display: none;">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <img src="../assets/logo-header.png" alt="LemonMind" class="sidebar-logo" width="110">
+        <span class="sidebar-badge">Admin</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-view="overview" onclick="switchView('overview')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          <span>Vue d'ensemble</span>
+        </button>
+        <button class="nav-item" data-view="cards" onclick="switchView('cards')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M8 7v10"/><path d="M12 7v10"/><path d="M16 7v10"/></svg>
+          <span>Cartes digitales</span>
+        </button>
+        <button class="nav-item" data-view="settings" onclick="switchView('settings')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span>Paramètres</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="user-avatar">A</div>
+          <div class="user-info">
+            <span class="user-name" id="sidebar-username">Admin</span>
+            <span class="user-role">Administrateur</span>
+          </div>
+        </div>
+        <button class="btn-logout" onclick="logout()" title="Déconnexion">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="main-content">
+      <!-- Mobile Header -->
+      <header class="mobile-header">
+        <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+        <img src="../assets/logo-header.png" alt="LemonMind" width="90">
+        <button class="btn-logout-mobile" onclick="logout()" title="Déconnexion">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </header>
+
+      <!-- ===== OVERVIEW VIEW ===== -->
+      <section id="view-overview" class="view active">
+        <div class="view-header">
+          <div>
+            <h2 class="view-title">Vue d'ensemble</h2>
+            <p class="view-subtitle">Gérez vos cartes digitales NFC</p>
+          </div>
+          <button class="btn btn-primary" onclick="openCreateModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <span>Nouvelle carte</span>
+          </button>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon total">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M8 7v10"/></svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value" id="stat-total">0</span>
+              <span class="stat-label">Total cartes</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon published">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value" id="stat-published">0</span>
+              <span class="stat-label">Publiées</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon draft">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value" id="stat-draft">0</span>
+              <span class="stat-label">Brouillons</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon departments">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value" id="stat-departments">0</span>
+              <span class="stat-label">Départements</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Cards -->
+        <div class="section-block">
+          <div class="section-header">
+            <h3>Cartes récentes</h3>
+            <button class="btn btn-ghost" onclick="switchView('cards')">Voir tout →</button>
+          </div>
+          <div class="cards-grid" id="recent-cards-grid">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== CARDS VIEW ===== -->
+      <section id="view-cards" class="view">
+        <div class="view-header">
+          <div>
+            <h2 class="view-title">Cartes digitales</h2>
+            <p class="view-subtitle">Toutes les cartes de l'équipe</p>
+          </div>
+          <div class="view-actions">
+            <button class="btn btn-outline" onclick="regenerateAll()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+              <span>Régénérer tout</span>
+            </button>
+            <button class="btn btn-primary" onclick="openCreateModal()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <span>Nouvelle carte</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter bar -->
+        <div class="filter-bar">
+          <div class="search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="search-cards" placeholder="Rechercher une carte..." oninput="filterCards()">
+          </div>
+          <div class="filter-pills">
+            <button class="pill active" data-filter="all" onclick="setFilter('all')">Toutes</button>
+            <button class="pill" data-filter="published" onclick="setFilter('published')">Publiées</button>
+            <button class="pill" data-filter="draft" onclick="setFilter('draft')">Brouillons</button>
+          </div>
+        </div>
+
+        <div class="cards-table-wrapper">
+          <table class="cards-table" id="cards-table">
+            <thead>
+              <tr>
+                <th class="th-photo">Photo</th>
+                <th>Nom complet</th>
+                <th class="hide-mobile">Poste</th>
+                <th class="hide-mobile">Département</th>
+                <th>Statut</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="cards-table-body">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+          <div id="no-cards" class="empty-state" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M8 7v10"/><path d="M12 7v10"/><path d="M16 7v10"/></svg>
+            <p>Aucune carte trouvée</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== SETTINGS VIEW ===== -->
+      <section id="view-settings" class="view">
+        <div class="view-header">
+          <div>
+            <h2 class="view-title">Paramètres</h2>
+            <p class="view-subtitle">Configuration du compte administrateur</p>
+          </div>
+        </div>
+
+        <div class="settings-grid">
+          <div class="settings-card">
+            <h3>Changer le mot de passe</h3>
+            <form id="change-password-form" onsubmit="changePassword(event)">
+              <div class="form-field">
+                <label for="current-password">Mot de passe actuel</label>
+                <input type="password" id="current-password" required>
+              </div>
+              <div class="form-field">
+                <label for="new-password">Nouveau mot de passe</label>
+                <input type="password" id="new-password" required minlength="8">
+              </div>
+              <div class="form-field">
+                <label for="confirm-password">Confirmer le mot de passe</label>
+                <input type="password" id="confirm-password" required minlength="8">
+              </div>
+              <div id="password-error" class="form-error" hidden></div>
+              <div id="password-success" class="form-success" hidden></div>
+              <button type="submit" class="btn btn-primary">Mettre à jour</button>
+            </form>
+          </div>
+
+          <div class="settings-card">
+            <h3>Maintenance</h3>
+            <p class="settings-desc">Régénérer toutes les pages NFC publiées à partir des données actuelles.</p>
+            <button class="btn btn-outline" onclick="regenerateAll()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+              <span>Régénérer toutes les pages</span>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ========== CARD MODAL (Create / Edit) ========== -->
+  <div id="card-modal" class="modal-overlay" hidden>
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modal-title">Nouvelle carte</h2>
+        <button class="modal-close" onclick="closeModal()" aria-label="Fermer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <form id="card-form" onsubmit="saveCard(event)">
+        <div class="modal-body">
+          <!-- Photo upload -->
+          <div class="photo-upload-zone">
+            <div class="photo-preview" id="photo-preview">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <img id="photo-preview-img" src="" alt="" hidden>
+            </div>
+            <div class="photo-upload-info">
+              <label for="photo-input" class="btn btn-outline btn-sm">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <span>Choisir une photo</span>
+              </label>
+              <input type="file" id="photo-input" accept="image/*" hidden onchange="previewPhoto(this)">
+              <p class="upload-hint">JPG, PNG ou WebP • Max 10 MB</p>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="card-firstName">Prénom *</label>
+              <input type="text" id="card-firstName" name="firstName" required placeholder="Amal">
+            </div>
+            <div class="form-field">
+              <label for="card-lastName">Nom *</label>
+              <input type="text" id="card-lastName" name="lastName" required placeholder="AMAZOUZ">
+            </div>
+            <div class="form-field full-width highlight-email-field">
+              <label for="card-email" class="email-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="field-icon"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                <span>Adresse Email Professionnelle *</span>
+              </label>
+              <input type="email" id="card-email" name="email" required placeholder="amal@lemonmind.agency" class="input-highlight">
+            </div>
+            <div class="form-field">
+              <label for="card-phone">Téléphone direct</label>
+              <input type="tel" id="card-phone" name="phone" placeholder="+212661768009">
+            </div>
+            <div class="form-field">
+              <label for="card-whatsapp">WhatsApp</label>
+              <input type="tel" id="card-whatsapp" name="whatsapp" placeholder="+212661768009">
+            </div>
+            <div class="form-field">
+              <label for="card-profession">Profession / Poste</label>
+              <input type="text" id="card-profession" name="profession" placeholder="Chief Digital Officer">
+            </div>
+            <div class="form-field">
+              <label for="card-badge">Badge affiché</label>
+              <input type="text" id="card-badge" name="badge" placeholder="Direction">
+            </div>
+            <div class="form-field">
+              <label for="card-department">Département</label>
+              <input type="text" id="card-department" name="department" placeholder="Direction Générale">
+            </div>
+            <div class="form-field">
+              <label for="card-jobTitle">Catégorie interne</label>
+              <input type="text" id="card-jobTitle" name="jobTitle" placeholder="Direction">
+            </div>
+            <div class="form-field">
+              <label for="card-location">Localisation</label>
+              <input type="text" id="card-location" name="location" placeholder="Casablanca, Maroc">
+            </div>
+            <div class="form-field">
+              <label for="card-linkedin">LinkedIn</label>
+              <input type="url" id="card-linkedin" name="linkedin" placeholder="https://linkedin.com/in/...">
+            </div>
+            <div class="form-field full-width">
+              <label for="card-slug">URL personnalisée (slug)</label>
+              <div class="slug-preview">
+                <span class="slug-base">/equipe/</span>
+                <input type="text" id="card-slug" name="slug" placeholder="prenom-nom">
+              </div>
+              <p class="field-hint">⚠️ Modifier le slug peut rendre les cartes NFC physiques inaccessibles</p>
+            </div>
+
+            <!-- Publication & Showcase Toggles -->
+            <div class="form-field full-width toggle-section">
+              <label class="toggle-card">
+                <input type="checkbox" id="card-status-toggle" name="statusToggle" checked>
+                <div class="toggle-track">
+                  <span class="toggle-thumb"></span>
+                </div>
+                <div class="toggle-label-group">
+                  <span class="toggle-title">Publier directement sur l'accueil</span>
+                  <span class="toggle-desc">La carte sera immédiatement visible par tous les visiteurs sur la page d'accueil</span>
+                </div>
+              </label>
+
+              <label class="toggle-card">
+                <input type="checkbox" id="card-featured-toggle" name="featuredToggle">
+                <div class="toggle-track">
+                  <span class="toggle-thumb"></span>
+                </div>
+                <div class="toggle-label-group">
+                  <span class="toggle-title">Carte Vedette / VIP (Gold)</span>
+                  <span class="toggle-desc">Afficher dans la grille dorée d'honneur en haut de l'accueil</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div id="form-error" class="form-error" hidden></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" onclick="closeModal()">Annuler</button>
+          <button type="submit" class="btn btn-primary" id="modal-submit-btn">
+            <span>Créer la carte</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========== CONFIRM MODAL ========== -->
+  <div id="confirm-modal" class="modal-overlay" hidden>
+    <div class="modal modal-sm">
+      <div class="modal-header">
+        <h2 id="confirm-title">Confirmer</h2>
+        <button class="modal-close" onclick="closeConfirm()" aria-label="Fermer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p id="confirm-message"></p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeConfirm()">Annuler</button>
+        <button class="btn btn-danger" id="confirm-action-btn" onclick="executeConfirmAction()">Confirmer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== TOAST ========== -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

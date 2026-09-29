@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="90" height="90" viewBox="0 0 90 90">
+  <defs>
+    <!-- LemonMind L-Squares Signature Motif -->
+    <g id="lemon-squares">
+      <!-- Main L-shaped square cluster -->
+      <!-- Vertical stem squares -->
+      <rect x="18" y="14" width="10" height="10" rx="1.5" fill="none" stroke="rgba(140, 95, 15, 0.32)" stroke-width="1.2" />
+      <rect x="18.5" y="14.5" width="9" height="9" rx="1" fill="none" stroke="rgba(255, 252, 235, 0.35)" stroke-width="0.8" />
+      
+      <rect x="18" y="28" width="10" height="10" rx="1.5" fill="rgba(255, 252, 235, 0.15)" stroke="rgba(140, 95, 15, 0.32)" stroke-width="1.2" />
+      
+      <!-- Corner / elbow square -->
+      <rect x="18" y="42" width="10" height="10" rx="1.5" fill="none" stroke="rgba(140, 95, 15, 0.35)" stroke-width="1.3" />
+      <rect x="21" y="45" width="4" height="4" fill="rgba(140, 95, 15, 0.3)" />
+
+      <!-- Horizontal foot squares -->
+      <rect x="32" y="42" width="10" height="10" rx="1.5" fill="rgba(255, 252, 235, 0.15)" stroke="rgba(140, 95, 15, 0.32)" stroke-width="1.2" />
+      <rect x="46" y="42" width="10" height="10" rx="1.5" fill="none" stroke="rgba(140, 95, 15, 0.32)" stroke-width="1.2" />
+
+      <!-- Floating satellite squares (like the LemonMind logo) -->
+      <!-- Small top satellite -->
+      <rect x="32" y="16" width="6" height="6" rx="1" fill="rgba(255, 252, 235, 0.25)" stroke="rgba(140, 95, 15, 0.28)" stroke-width="1" />
+      <!-- Mid-left floating square -->
+      <rect x="6" y="24" width="7" height="7" rx="1" fill="none" stroke="rgba(140, 95, 15, 0.3)" stroke-width="1" />
+      <!-- Micro accent square -->
+      <rect x="8" y="38" width="4" height="4" rx="0.5" fill="rgba(140, 95, 15, 0.28)" />
+      <!-- Top-right satellite -->
+      <rect x="44" y="26" width="8" height="8" rx="1.5" fill="none" stroke="rgba(140, 95, 15, 0.3)" stroke-width="1" />
+      <rect x="44.5" y="26.5" width="7" height="7" rx="1" fill="none" stroke="rgba(255, 252, 235, 0.35)" stroke-width="0.8" />
+      <!-- Bottom satellite -->
+      <rect x="34" y="58" width="5" height="5" rx="1" fill="rgba(255, 252, 235, 0.2)" stroke="rgba(140, 95, 15, 0.26)" stroke-width="1" />
+
+      <!-- Subtle coordinate grid dots -->
+      <circle cx="6" cy="6" r="1" fill="rgba(140, 95, 15, 0.25)" />
+      <circle cx="60" cy="14" r="1.2" fill="rgba(140, 95, 15, 0.25)" />
+      <circle cx="58" cy="58" r="1" fill="rgba(140, 95, 15, 0.25)" />
+    </g>
+  </defs>
+
+  <!-- Seamless 90x90 layout: 1 center, 4 corners offset for fluid diagonal rhythm -->
+  <g transform="translate(10, 10)"><use href="#lemon-squares" /></g>
+  <g transform="translate(-35, -35)"><use href="#lemon-squares" /></g>
+  <g transform="translate(55, -35)"><use href="#lemon-squares" /></g>
+  <g transform="translate(-35, 55)"><use href="#lemon-squares" /></g>
+  <g transform="translate(55, 55)"><use href="#lemon-squares" /></g>
+</svg>
